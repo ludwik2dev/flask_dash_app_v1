@@ -1,7 +1,8 @@
-from dash import Dash, html, dcc, callback, Output, Input,State, no_update
+from dash import Dash, html, dcc, callback, Output, Input,State, no_update, ctx
 from dash.exceptions import PreventUpdate
 import plotly.graph_objects as go
 import pandas as pd
+import json
 
 
 app = Dash(__name__)
@@ -60,7 +61,12 @@ def update_dropdown(store):
 )
 def update_graph(country, year_from, year_to, store):
 
-    label = f'User selected: {country}'
+    button_id = ctx.triggered_id 
+
+    if button_id == 'dropdown-selection':
+        label = f'User selected: {country}'
+    else:
+        label = f'User inserted: {year_from}'
 
     try:
         year_from = int(year_from)
