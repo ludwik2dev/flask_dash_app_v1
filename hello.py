@@ -1,4 +1,5 @@
 from dash import Dash, html, dcc, callback, Output, Input,State
+from dash.exceptions import PreventUpdate
 import plotly.graph_objects as go
 import pandas as pd
 
@@ -13,7 +14,7 @@ app.layout = html.Div([
         html.H3(id='dropdown-label', style={'width': '50%', 'marginLeft': '10px'}),
     ], style={'display': 'flex', 'alignItems': 'center'}),
 
-    dcc.Input(id="year-from-input", type="number", placeholder="Year from"),  # , debounce=True
+    dcc.Input(value=1950, id="year-from-input", type="text", placeholder="Year from"),  # , debounce=True
     dcc.Input(value=2023, id="year-to-input", type="number", placeholder="Year to"),
     
     dcc.Graph(id='graph-content'),
@@ -58,6 +59,12 @@ def update_dropdown(store):
     prevent_initial_call=True
 )
 def update_graph(country, year_from, year_to, store):
+
+    try:
+        year_from = int(year_from)
+    except ValueError as e:
+        print(e)
+        raise PreventUpdate
 
     df = pd.DataFrame.from_dict(store)
     df_ = df[(df['country'] == country) & (df['year'] >= year_from) & (df['year'] <= year_to)]
