@@ -1,4 +1,4 @@
-from dash import Dash, html, dcc, callback, Output, Input,State
+from dash import Dash, html, dcc, callback, Output, Input,State, no_update
 from dash.exceptions import PreventUpdate
 import plotly.graph_objects as go
 import pandas as pd
@@ -60,31 +60,37 @@ def update_dropdown(store):
 )
 def update_graph(country, year_from, year_to, store):
 
-    try:
-        year_from = int(year_from)
-    except ValueError as e:
-        print(e)
-        raise PreventUpdate
-
-    df = pd.DataFrame.from_dict(store)
-    df_ = df[(df['country'] == country) & (df['year'] >= year_from) & (df['year'] <= year_to)]
-    fig = go.Figure()
-    fig.add_trace(
-        go.Scatter(
-            x=df_['year'], 
-            y=df_['pop'],
-            line={'color': 'black'},
-            marker={'color': 'red'},
-            mode='lines+markers'
-        )
-    )
-    fig.update_layout(
-        plot_bgcolor='lightgreen',
-    )
-
     label = f'User selected: {country}'
 
-    return fig, label
+    try:
+        year_from = int(year_from)
+        df = pd.DataFrame.from_dict(store)
+        df_ = df[(df['country'] == country) & (df['year'] >= year_from) & (df['year'] <= year_to)]
+        fig = go.Figure()
+        fig.add_trace(
+            go.Scatter(
+                x=df_['year'], 
+                y=df_['pop'],
+                line={'color': 'black'},
+                marker={'color': 'red'},
+                mode='lines+markers'
+            )
+        )
+        fig.update_layout(
+            plot_bgcolor='lightgreen',
+        )
+
+        return fig, label
+
+    except ValueError as e:
+        print(e)
+        return no_update, label
+
+
+
+    
+
+    
 
 
 if __name__ == '__main__':

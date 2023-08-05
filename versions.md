@@ -25,3 +25,7 @@
 
     - Added example of PreventUpdate
     
+# 1f. 
+
+    - Added example of no_update
+    
