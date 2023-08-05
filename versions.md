@@ -16,4 +16,8 @@
 # 1c. 
 
     - Added chain callback
+
+# 1d. 
+
+    - Added store updated from layout
     
