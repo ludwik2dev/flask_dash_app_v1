@@ -12,3 +12,8 @@
     - Added one state
     - Added prevent_initial_call to callback
     - Show dev tools
+
+# 1c. 
+
+    - Added chain callback
+    

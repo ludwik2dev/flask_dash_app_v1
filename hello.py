@@ -4,18 +4,16 @@ import pandas as pd
 
 
 df = pd.read_csv('gapminder.csv')
-counries = df['country'].unique()
 
 
 app = Dash(__name__)
 
-country = 'Poland'
 app.layout = html.Div([
     html.H1(children='Title - My first App'),
     
     html.Div([
-        html.Div(dcc.Dropdown(options=counries, value=country, id='dropdown-selection'), style={'width': '50%', 'marginRight': '10px'}),
-        html.H3(f'User selected: {country}', id='dropdown-label', style={'width': '50%', 'marginLeft': '10px'}),
+        html.Div(dcc.Dropdown(id='dropdown-selection'), style={'width': '50%', 'marginRight': '10px'}),
+        html.H3(id='dropdown-label', style={'width': '50%', 'marginLeft': '10px'}),
     ], style={'display': 'flex', 'alignItems': 'center'}),
 
     dcc.Input(id="year-from-input", type="number", placeholder="Year from"),  # , debounce=True
@@ -23,7 +21,23 @@ app.layout = html.Div([
     
     dcc.Graph(id='graph-content'),
 
-], style={'paddingLeft': '200px', 'paddingRight': '200px'})
+], style={'paddingLeft': '200px', 'paddingRight': '200px'}, id='id-layout')
+
+
+
+@callback(
+    Output('dropdown-selection', 'options'),
+    Output('dropdown-selection', 'value'),
+    Input('dropdown-selection', 'id'),
+)
+def update_dropdown(_id):
+    
+    print(_id)
+    counries = df['country'].unique()
+    country = 'Poland'
+
+    return counries, country
+
 
 @callback(
     Output('graph-content', 'figure'),
