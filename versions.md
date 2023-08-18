@@ -33,3 +33,7 @@
 
     - Added example of callback_context
     
+# 1h. 
+
+    - Added example of interactive graphing
+    

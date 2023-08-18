@@ -20,6 +20,8 @@ app.layout = html.Div([
     
     dcc.Graph(id='graph-content'),
 
+    html.Div(id='graph-click'),
+
     dcc.Store(id='store-data'),
 
 ], style={'paddingLeft': '200px', 'paddingRight': '200px'}, id='id-layout')
@@ -79,11 +81,13 @@ def update_graph(country, year_from, year_to, store):
                 y=df_['pop'],
                 line={'color': 'black'},
                 marker={'color': 'red'},
-                mode='lines+markers'
+                mode='lines+markers',
+                
             )
         )
         fig.update_layout(
             plot_bgcolor='lightgreen',
+            clickmode='event'
         )
 
         return fig, label
@@ -93,10 +97,18 @@ def update_graph(country, year_from, year_to, store):
         return no_update, label
 
 
+@callback(
+    Output('graph-click', 'children'),
+    Input('graph-content', 'clickData'),
+    prevent_initial_call=True
+)
+def get_point(clickData):
 
-    
-
-    
+    print(clickData)
+    year = clickData['points'][0]['x']
+    pop = clickData['points'][0]['y'] / 1_000_000
+    text = f'Year: {year}, population: {round(pop, 2)} mln'
+    return text
 
 
 if __name__ == '__main__':
